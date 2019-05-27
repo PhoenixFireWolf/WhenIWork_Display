@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Copy element &apos;chromedriver_74.exe&apos; to &apos;WhenIWorkAdvanceWeek&apos;&#x0D;&#x0A;- Original project: &apos;WhenIWorkAdvanceWeek&apos;&#x0D;&#x0A;- Destination element: &apos;WhenIWorkAdvanceWeek&apos;&#x0D;&#x0A;- Original element: &apos;chromedriver_74.exe&apos;" description="Copy file" destination="=WhenIWorkAdvanceWeek" element1="libs/chromedriver_74.exe" files="1" flags="589830" folders="0" id="org.eclipse.jdt.ui.copy" policy="org.eclipse.jdt.ui.copyResources" stamp="1558864588665" units="0" version="1.0"/>
+</session>

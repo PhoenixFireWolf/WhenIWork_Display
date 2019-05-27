@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename type &apos;WhenIWorkRefresher&apos; to &apos;WhenIWorkAdvanceWeek&apos;&#x0D;&#x0A;- Original project: &apos;WhenIWorkAdvanceWeek&apos;&#x0D;&#x0A;- Original element: &apos;WhenIWorkRefresher&apos;&#x0D;&#x0A;- Renamed element: &apos;WhenIWorkAdvanceWeek&apos;&#x0D;&#x0A;- Update references to refactored element&#x0D;&#x0A;- Update textual occurrences in comments and strings" description="Rename type &apos;WhenIWorkRefresher&apos;" flags="589830" id="org.eclipse.jdt.ui.rename.type" input="/src&lt;{WhenIWorkRefresher.java[WhenIWorkRefresher" matchStrategy="1" name="WhenIWorkAdvanceWeek" qualified="false" references="true" similarDeclarations="false" stamp="1557599688925" textual="false" version="1.0"/>
+</session>

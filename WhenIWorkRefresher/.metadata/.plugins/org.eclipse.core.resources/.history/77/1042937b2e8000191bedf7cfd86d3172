@@ -1,0 +1,138 @@
+import java.awt.AWTException;
+import java.awt.Robot;
+import java.awt.event.KeyEvent;
+import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.util.Date;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.remote.HttpCommandExecutor;
+import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.remote.SessionId;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+public class WhenIWorkAdvanceWeek extends Thread {
+
+
+	static RemoteWebDriver wd;
+	static SessionId session_id;
+	static URL url;
+	static String dayToChange = "Wed";
+	static int cHour = 03;
+	static int cMin = 00;
+	static int cSec = 00;
+	static Robot robot;
+	static LocalDateTime now = LocalDateTime.now();
+
+	public static void main(String[] args) {
+		initialize();
+		zoomOut();
+		advance();
+	}
+
+	public static void zoomOut() {
+		// Takes control and does not give it back
+		try {
+			robot = new Robot();
+			robot.keyPress(KeyEvent.VK_CONTROL);
+			robot.keyPress(KeyEvent.VK_SUBTRACT);
+			robot.keyRelease(KeyEvent.VK_SUBTRACT);
+			robot.keyPress(KeyEvent.VK_SUBTRACT);
+			robot.keyRelease(KeyEvent.VK_SUBTRACT);
+			robot.keyRelease(KeyEvent.VK_CONTROL);
+		} catch (AWTException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void zoomIn() {
+		try {
+			robot = new Robot();
+			robot.keyPress(KeyEvent.VK_CONTROL);
+			robot.keyPress(KeyEvent.VK_ADD);
+			robot.keyRelease(KeyEvent.VK_ADD);
+			robot.keyPress(KeyEvent.VK_ADD);
+			robot.keyRelease(KeyEvent.VK_ADD);
+			robot.keyRelease(KeyEvent.VK_CONTROL);
+		} catch (AWTException e){
+			e.printStackTrace();
+		}
+	}
+
+	public static void initialize() {
+
+		String path = "./chromedriver_74.exe";
+		System.setProperty("webdriver.chrome.driver", path);
+
+		ChromeOptions options = new ChromeOptions();
+		options.addArguments("disable-infobars");
+
+		wd = new ChromeDriver(options);
+		
+		HttpCommandExecutor executor = (HttpCommandExecutor) wd.getCommandExecutor();
+		url = executor.getAddressOfRemoteServer();
+		session_id = wd.getSessionId();
+		wd.get("https://appx.wheniwork.com/scheduler");
+		
+		WebDriverWait wait = new WebDriverWait(wd, 20);
+		wd.manage().window().maximize();
+		wd.findElement(By.id("email")).sendKeys("PhoenixFireWolf@live.com");
+		wd.findElement(By.id("password")).sendKeys("u#htJv$7!@a39h7");
+		wd.findElement(By.xpath("//button[@class='btn btn-primary btn-login btn-md btn-block']")).click();
+		wait.until(ExpectedConditions.presenceOfElementLocated(
+				By.xpath("//button[@class='btn btn-secondary toggle-fullscreen btn-icn btn-panel btn-md']"))).click();
+		wd.findElement(By.xpath("//div[@class='hide-sidebar hint--right']")).click();
+	}
+
+	public static boolean dayToChange() {
+		Date now = new Date();
+		SimpleDateFormat simpleDateformat = new SimpleDateFormat("E");
+		return simpleDateformat.format(now).equals(dayToChange);
+	}
+
+	public static boolean timeToChange() {
+		int hour = now.getHour();
+		int minute = now.getMinute();
+		int second = now.getSecond();
+		return hour == cHour && minute == cMin && second == cSec;
+	}
+	
+	public static boolean stillOpen() {
+		boolean open = true;
+		try {
+			wd.findElement(By.xpath("//button[@class='btn btn-secondary mr-2 navigate-today btn-panel btn-md']"));
+		} catch (NoSuchElementException e) {
+			open = false;
+		}
+		return open;
+	}
+
+	public static void advance() {
+		boolean stillOpen = stillOpen();
+		while (stillOpen == true) {
+			stillOpen = stillOpen();
+			if (dayToChange() && timeToChange()) {
+				zoomIn();
+				wd.findElement(By.xpath("//button[@class='btn btn-secondary mr-2 navigate-today btn-panel btn-md']"))
+						.click();
+				zoomOut();
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			} else if (now.getHour() % 6 == 0) {
+				wd.navigate().refresh();
+			}
+		}
+		
+		if(stillOpen == false) {
+			wd.quit();
+		}
+	}
+}
